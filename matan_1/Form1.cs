@@ -13,6 +13,7 @@ namespace matan_1
     public partial class Form1 : Form
     {
         double[,] editTable = new double[4, 5];
+        double[,] startTable = new double[4, 5];
 
         public Form1()
         {
@@ -45,6 +46,14 @@ namespace matan_1
             editTable[3, 3] = double.Parse(p4Box.Text);
             editTable[3, 4] = double.Parse(answ4Box.Text);
 
+            for (int i = 0; i < editTable.GetLength(0); i++)
+            {
+                for(int j = 0; j < editTable.GetLength(1); j++)
+                {
+                    startTable[i, j] = editTable[i, j];
+                }
+            }
+
             successLabel.ForeColor = Color.Green;
             successLabel.Text = "Success!";
             finalTableBox.Text = "";
@@ -64,6 +73,34 @@ namespace matan_1
                 int coeffNum = 0;
                 double[] coeffTable = new double[coeffAmount];
                 int length = 0;
+
+                if (editTable[strNum, colNum] == 0)
+                {
+                    finalTableBox.Text += $"editTable[{strNum}, {colNum}] == {editTable[strNum, colNum]}";
+                    for (int i = strNum; i < editTable.GetLength(0); i++)
+                    {
+                        if(i == editTable.GetLength(0) - 1)
+                        {
+                            break;
+                        }
+                        for (int j = colNum; j < editTable.GetLength(1); j++)
+                        {
+                                editTable[strNum, j] = editTable[i + 1, j];
+                                editTable[i + 1, j] = startTable[strNum, j];
+                        }
+                        for (int c = 0; c < editTable.GetLength(0); c++)
+                        {
+                            for (int j = 0; j < editTable.GetLength(1); j++)
+                            {
+                                startTable[c, j] = editTable[c, j];
+                            }
+                        }
+                        if (editTable[strNum, colNum] != 0)
+                        {
+                            break;
+                        }
+                    }
+                }
                 for (int j = k + 1; j < editTable.GetLength(0); j++)
                 {
                     for (int c = length; c < coeffTable.Length;)
